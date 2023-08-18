@@ -1,9 +1,5 @@
 require("module-alias/register");
-const {
-  HttpError,
-  ctrlWrapper,
-  validationSchema: addSchema,
-} = require("@root/helpers");
+const { HttpError, ctrlWrapper } = require("@root/helpers");
 const {
   listContacts,
   getContactById,
@@ -30,16 +26,6 @@ const getById = async (req, res) => {
 };
 
 const addById = async (req, res) => {
-  if (!Object.keys(req.body).length) {
-    throw HttpError(400, "missing fields");
-  }
-
-  const { error } = addSchema.validate(req.body);
-
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const result = await addContact(req.body);
 
   res.status(201).json(result);
@@ -57,16 +43,6 @@ const deleteById = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  if (!Object.keys(req.body).length) {
-    throw HttpError(400, "missing fields");
-  }
-
-  const { error } = addSchema.validate(req.body);
-
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const { contactId } = req.params;
   const result = await updateContact(contactId, req.body);
 
