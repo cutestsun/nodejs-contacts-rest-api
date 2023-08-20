@@ -1,9 +1,7 @@
 const HttpError = require("./HttpError");
-const ctrlWrapper = require("./ctrlWrapper");
-const validationSchema = require("./validationSchema");
+const controllerWrapper = require("./controllerWrapper");
 
 module.exports = {
   HttpError,
-  ctrlWrapper,
-  validationSchema,
+  controllerWrapper,
 };
