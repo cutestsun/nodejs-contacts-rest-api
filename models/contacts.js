@@ -1,6 +1,7 @@
 const BaseJoi = require("joi");
 const Joi = BaseJoi.extend(require("joi-phone-number"));
 const { Schema, model } = require("mongoose");
+const handleMongooseError = require("../helpers/handleMongooseError");
 
 const contactSchema = new Schema(
   {
@@ -18,13 +19,19 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false }
 );
 
-const Contact = model("Contact", contactSchema);
+contactSchema.post("save", handleMongooseError);
 
-const validationSchema = Joi.object({
+const Contact = model("contact", contactSchema);
+
+const contactValidationSchema = Joi.object({
   name: Joi.string()
     .required()
     .messages({ "any.required": "missing required name field" }),
@@ -49,6 +56,6 @@ const updateFavoriteSchema = Joi.object({
   }),
 });
 
-const schemas = { validationSchema, updateFavoriteSchema };
+const schemas = { contactValidationSchema, updateFavoriteSchema };
 
 module.exports = { Contact, schemas };
