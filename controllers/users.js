@@ -1,10 +1,15 @@
 require("module-alias/register");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
+const Jimp = require("jimp");
 const { HttpError, controllerWrapper } = require("@root/helpers");
 const { User } = require("@root/models/users");
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const registerController = async (req, res) => {
   const { email, password } = req.body;
@@ -15,8 +20,13 @@ const registerController = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     user: {
@@ -49,11 +59,11 @@ const loginController = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
-    token,
     user: {
       email: user.email,
       subscription: user.subscription,
     },
+    token,
   });
 };
 
@@ -92,10 +102,32 @@ const updateSubscriptionController = async (req, res) => {
   });
 };
 
+const updateAvatarController = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+
+  Jimp.read(tempUpload)
+    .then((image) => {
+      image.resize(250, 250).quality(90).write(resultUpload);
+    })
+    .catch((err) => {
+      throw HttpError(400, err);
+    });
+
+  const avatarURL = path.join("avatars", filename);
+
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({ avatarURL });
+};
+
 module.exports = {
   registerController: controllerWrapper(registerController),
   loginController: controllerWrapper(loginController),
   getCurrentController: controllerWrapper(getCurrentController),
   logoutController: controllerWrapper(logoutController),
   updateSubscriptionController: controllerWrapper(updateSubscriptionController),
+  updateAvatarController: controllerWrapper(updateAvatarController),
 };
