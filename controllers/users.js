@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const Jimp = require("jimp");
+const fs = require("fs/promises");
 const { HttpError, controllerWrapper } = require("@root/helpers");
 const { User } = require("@root/models/users");
 
@@ -115,6 +116,8 @@ const updateAvatarController = async (req, res) => {
     .catch((err) => {
       throw HttpError(400, err);
     });
+
+  fs.unlink(tempUpload);
 
   const avatarURL = path.join("avatars", filename);
 
