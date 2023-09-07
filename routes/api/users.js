@@ -7,10 +7,16 @@ const {
   logoutController,
   updateSubscriptionController,
   updateAvatarController,
+  verificationController,
+  resendEmailConfirmationController,
 } = require("@root/controllers/users");
 const { validateBody, authenticate, upload } = require("@root/middlewares");
 const {
-  schemas: { userValidationSchema, updateSubscriptionSchema },
+  schemas: {
+    userValidationSchema,
+    updateSubscriptionSchema,
+    resendEmailConfirmationSchema,
+  },
 } = require("@root/models/users");
 
 const router = express.Router();
@@ -39,6 +45,14 @@ router.patch(
   authenticate,
   upload.single("avatar"),
   updateAvatarController
+);
+
+router.get("/verify/:verificationToken", verificationController);
+
+router.post(
+  "/verify",
+  validateBody(resendEmailConfirmationSchema),
+  resendEmailConfirmationController
 );
 
 module.exports = router;
