@@ -13,9 +13,9 @@ This project is a simple REST API for managing contacts. It allows you to create
 
 ## User Authentication and Authorization
 
-Users can register and log in to manage their contacts.
-Token-based authentication using JWT (JSON Web Tokens).
-Secure endpoints: Only authenticated users can create, update, and delete contacts.
+- Users can register and log in to manage their contacts.
+- Token-based authentication using JWT (JSON Web Tokens).
+- Secure endpoints: Only authenticated users can create, update, and delete contacts.
 
 ## Technologies Used
 
