@@ -11,6 +11,12 @@ This project is a simple REST API for managing contacts. It allows you to create
 - Update the information for an existing contact.
 - Delete a contact by ID.
 
+## User Authentication and Authorization
+
+Users can register and log in to manage their contacts.
+Token-based authentication using JWT (JSON Web Tokens).
+Secure endpoints: Only authenticated users can create, update, and delete contacts.
+
 ## Technologies Used
 
 - Node.js
@@ -46,11 +52,23 @@ This project is a simple REST API for managing contacts. It allows you to create
 
 ## API Endpoints
 
+### Contacts
 - `GET /api/contacts` - Get a list of all contacts.
 - `GET /api/contacts/:contactId` - Get a specific contact by ID.
 - `POST /api/contacts` - Create a new contact.
 - `PUT /api/contacts/:contactId` - Update an existing contact by ID.
+- `PATCH /api/contacts/:contactId/favorite` - Update favorite status of the contact by ID.
 - `DELETE /api/contacts/:contactId` - Delete a contact by ID.
+
+### Users
+- `GET /users/current` - Get data of the current user.
+- `GET /users/verify/:verificationToken` - Verify user.
+- `POST /users/register` - Register a new user.
+- `POST /users/login` - Login existing user.
+- `POST /users/logout` - Logout existing user.
+- `POST /users/verify` - Resend email confirmation.
+- `PATCH /users` - Update the subscription of the user.
+- `PATCH /users/avatars` - Update the avatar of the user.
 
 ## Usage
 
