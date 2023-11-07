@@ -34,7 +34,7 @@ This project is a simple REST API for managing contacts. It allows you to create
    npm install
    ```
 
-3. Set up a MongoDB database and configure the connection URL in `config/default.json`.
+3. Set up a MongoDB database and configure the connection URL in `.env`.
 
 4. Start the server:
 
